@@ -23,7 +23,7 @@ current_dir=$(pwd)
 current_user=$(whoami)
 
 # Define the path to the script file
-script_file="$current_dir/2install.sh"
+script_file="$current_dir/install.sh"
 
 # Check if the script file exists
 if [ -f "$script_file" ]; then
