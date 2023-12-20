@@ -2,12 +2,7 @@
 
 # Receive the GitHub repo as an argument
 github_repo="$1"
-# Check if a GitHub repo is provided
-if [ -n "$github_repo" ]; then
-    echo "Updating HTML site from GitHub repo: $github_repo"
-else
-    echo "No GitHub repo specified. Default site provided"
-fi
+
 
 #Sys Update
 printf "Root password:\n"
@@ -28,7 +23,7 @@ printf "\napt-get upgrade complete\n"
 
 printf "\nCreating directory to link to nginx volume\n\n"
 sudo mkdir -p /usr/share/nginx/html/
-git clone $github_repo /usr/share/nginx/html/
+sudo git clone $github_repo /usr/share/nginx/html/
 sudo mkdir -p /var/lib/docker/volumes/ngx-proxy/letsencrypt
 sudo mkdir -p /var/lib/docker/volumes/ngx-proxy/data
 sleep 2
