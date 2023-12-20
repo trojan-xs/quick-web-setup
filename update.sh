@@ -10,13 +10,14 @@ sudo echo
 
 printf "\nUpdating and upgrading \n\n"
 sleep 2
-#sudo apt-get update -y
+sudo apt-get update -y
 sleep 2
 printf "\napt-get update complete\n"
+
 sleep 2
 printf "\nStarting apt-get upgrade\n"
 sleep 2
-#sudo apt-get upgrade -y
+sudo apt-get upgrade -y
 sleep 2
 printf "\napt-get upgrade complete\n"
 
@@ -76,4 +77,4 @@ printf "\nServer Rebooting. Press Ctrl C to abort\n"
 sleep 5
 echo Rebooting
 sleep 5
-#sudo reboot
+sudo reboot
