@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #Sys Update
-sudo printf "Root password:\n"
+printf "Root password:\n"
+sudo echo
 
 printf "\nUpdating and upgrading \n\n"
 sleep 2
@@ -65,7 +66,7 @@ fi
 
 #Restart
 
-printf "\nServer rebooting. Continuing install on terminal login after reboot\n"
+printf "\nServer rebooting. Login with same user after reboot to continue install\n"
 sleep 2
 printf "\nServer Rebooting. Press Ctrl C to abort\n"
 sleep 2

@@ -5,6 +5,8 @@
 sleep 2
 printf "\nWelcome back\n"
 sleep 3
+printf "Root password:\n"
+sudo echo
 
 printf "\nInstaling tools \n\n"
 sleep 3
