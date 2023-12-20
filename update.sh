@@ -3,15 +3,27 @@
 #Sys Update
 sudo printf "Root password:\n"
 
-printf "Updating and upgrading \n\n"
+printf "\nUpdating and upgrading \n\n"
+sleep 5
 sudo apt-get update
+sleep 5
+printf "\napt-get update complete\n"
+sleep 5
+printf "\nStarting apt-get upgrade\n"
+sleep 5
 sudo apt-get upgrade 
+sleep 5
+printf "\napt-get upgrade complete\n"
 
-printf "Creating directory to link to nginx volume\n\n"
+
+printf "\nCreating directory to link to nginx volume\n\n"
 sudo mkdir /usr/share/nginx/html/
 wget -P /usr/share/nginx/html/ https://raw.githubusercontent.com/trojan-xs/static-hello/main/index.html
 sudo mkdir /var/lib/docker/volumes/ngx-proxy/letsencrypt
 sudo mkdir /var/lib/docker/volumes/ngx-proxy/data
+sleep 5
+printf "\nDirectories mapped\n"
+sleep 3
 
 
 ### Saves install.sh script to .bashrc on login ###
@@ -50,4 +62,13 @@ else
     echo "Script file not found: $script_file"
 fi
 
+
+#Restart
+
+printf "\nServer rebooting. Continuing install on terminal login after reboot\n"
+sleep 5
+printf "\nServer Rebooting. Press Ctrl C to abort\n"
+sleep 5
+echo Rebooting
+sleep 3
 sudo reboot

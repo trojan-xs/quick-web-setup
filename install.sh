@@ -2,26 +2,37 @@
 
 
 #Installing tools
-printf "Instaling tools \n\n"
+sleep 5
+printf "\nWelcome back\n"
+sleep 3
+
+printf "\nInstaling tools \n\n"
+sleep 3
 sudo apt install curl git net-tools screen nmap
 
-printf "Installing docker \n\n"
+
+printf "\nInstalling docker \n\n"
+sleep 3
 sudo apt install docker.io
 
 
 #Pulling images
-printf "Pulling images\n\n"
+printf "\nPulling images\n\n"
+sleep 3
 sudo docker pull jc21/nginx-proxy-manager:latest
 sudo docker pull portainer/portainer-ce:latest
 sudo docker pull nginx:latest
 
 #Start machines
-printf "Spinning up machines"
+printf "\nSpinning up machines\n"
+sleep 3
 sudo docker run -d -p 8080:80 --name nginx --restart=always -v /usr/share/nginx/html/:/usr/share/nginx/html nginx:latest
 sudo docker run -d -p 80:80 -p 443:443 -p 81:81 --name ngx-proxy --restart=always -v /var/lib/docker/volumes/ngx-proxy/data:/data -v /var/lib/docker/volumes/ngx-proxy/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest 
 sudo docker run -d -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 
 ### Clearing bashrc ###
+printf "\nClearing bashrc\n"
+sleep 3
 # Get the username
 current_user=$(whoami)
 
@@ -62,6 +73,6 @@ printf """
 Nginx First time login:
 Email:    admin@example.com
 Password: changeme\n\n
-Good luck
+Good bye!
 """
 

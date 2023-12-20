@@ -7,19 +7,25 @@ current_filepath=$(pwd)
 install_script="$current_filepath/install.sh"
 update_script="$current_filepath/update.sh"
 
-# Function to apply execute permissions and execute a script
-apply_permissions_and_execute() {
+# Function to apply execute permissions to a script
+apply_execute_permissions() {
     local script_path=$1
     if [ -f "$script_path" ]; then
         chmod +x "$script_path"
         echo "chmod +x applied to $script_path in the current working directory."
-        echo "Executing $script_path..."
-        /bin/bash "$script_path"
     else
         echo "Error: $script_path not found in the current working directory."
     fi
 }
 
-# Apply execute permissions to install.sh and update.sh
-apply_permissions_and_execute "$install_script"
-apply_permissions_and_execute "$update_script"
+# Apply execute permissions to both install.sh and update.sh
+apply_execute_permissions "$install_script"
+apply_execute_permissions "$update_script"
+
+# Execute update.sh
+if [ -f "$update_script" ]; then
+    echo "Executing $update_script..."
+    /bin/bash "$update_script"
+else
+    echo "Error: $update_script not found in the current working directory."
+fi
