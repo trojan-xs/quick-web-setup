@@ -18,7 +18,7 @@ sudo mkdir /var/lib/docker/volumes/ngx-proxy/data
 
 # Get the full working path
 working_path=$(pwd)
-script_path="$working_path/install.sh"
+script_path="$working_path/2install.sh"
 
 # Add the script to crontab
 (crontab -l ; echo "@reboot $script_path") | crontab -
