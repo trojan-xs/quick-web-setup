@@ -1,25 +1,35 @@
 #!/bin/bash
 
+# Receive the GitHub repo as an argument
+github_repo="$1"
+# Check if a GitHub repo is provided
+if [ -n "$github_repo" ]; then
+    echo "Updating HTML site from GitHub repo: $github_repo"
+    git clone "$github_repo" .
+else
+    echo "No GitHub repo specified. Default site provided"
+fi
+
 #Sys Update
 printf "Root password:\n"
 sudo echo
 
 printf "\nUpdating and upgrading \n\n"
 sleep 2
-sudo apt-get update -y
+#sudo apt-get update -y
 sleep 2
 printf "\napt-get update complete\n"
 sleep 2
 printf "\nStarting apt-get upgrade\n"
 sleep 2
-sudo apt-get upgrade -y
+#sudo apt-get upgrade -y
 sleep 2
 printf "\napt-get upgrade complete\n"
 
 
 printf "\nCreating directory to link to nginx volume\n\n"
 sudo mkdir /usr/share/nginx/html/
-wget -P /usr/share/nginx/html/ https://raw.githubusercontent.com/trojan-xs/static-hello/main/index.html
+git clone $github_repo /usr/share/nginx/html/
 sudo mkdir /var/lib/docker/volumes/ngx-proxy/letsencrypt
 sudo mkdir /var/lib/docker/volumes/ngx-proxy/data
 sleep 2
@@ -72,4 +82,4 @@ printf "\nServer Rebooting. Press Ctrl C to abort\n"
 sleep 2
 echo Rebooting
 sleep 5
-sudo reboot
+#sudo reboot

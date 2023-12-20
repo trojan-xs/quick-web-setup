@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+# Default GitHub repository (empty string)
+github_repo="https://github.com/trojan-xs/static-hello"
+
+# Check if a GitHub repo argument is provided
+if [ "$#" -eq 1 ]; then
+    github_repo="$1"
+fi
+
 # Get the current filepath
 current_filepath=$(pwd)
 
@@ -25,7 +34,7 @@ apply_execute_permissions "$update_script"
 # Execute update.sh
 if [ -f "$update_script" ]; then
     echo "Executing $update_script..."
-    /bin/bash "$update_script"
+    /bin/bash "$update_script" "$github_repo"
 else
     echo "Error: $update_script not found in the current working directory."
 fi
