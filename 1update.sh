@@ -14,9 +14,7 @@ sudo mkdir /var/lib/docker/volumes/ngx-proxy/letsencrypt
 sudo mkdir /var/lib/docker/volumes/ngx-proxy/data
 
 
-### Add cron script to call install bashrc after reboot ###
-
-#!/bin/bash
+### Saves install.sh script to .bashrc on login ###
 
 # Get the current working directory
 current_dir=$(pwd)
@@ -52,32 +50,4 @@ else
     echo "Script file not found: $script_file"
 fi
 
-
-
-
-
-
-
-
-
-
-
-
-
-# Get the full working path
-working_path=$(pwd)
-script_path="$working_path/1install.sh"
-
-# Add the script to crontab
-(crontab -l ; echo "/bin/bash $script_path") | crontab -
-
-#Reboot the server
-printf "\nServer install finished\n"
-printf "Rebooting"
-sleep 3
-
 sudo reboot
-
-
-
-
