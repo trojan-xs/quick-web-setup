@@ -16,6 +16,8 @@ sudo mkdir /var/lib/docker/volumes/ngx-proxy/data
 
 ### Add cron script to call install bashrc after reboot ###
 
+#!/bin/bash
+
 # Get the current working directory
 current_dir=$(pwd)
 
@@ -27,6 +29,17 @@ script_file="$current_dir/2install.sh"
 
 # Check if the script file exists
 if [ -f "$script_file" ]; then
+    # Backup the existing .bashrc as .bashrc.original
+    if [ "$current_user" = "root" ]; then
+        bashrc_backup="/root/.bashrc.original"
+        echo "Backing up existing .bashrc to $bashrc_backup"
+        cp "/root/.bashrc" "$bashrc_backup"
+    else
+        bashrc_backup="/home/$current_user/.bashrc.original"
+        echo "Backing up existing .bashrc to $bashrc_backup"
+        cp "/home/$current_user/.bashrc" "$bashrc_backup"
+    fi
+
     # Append the script execution line to the user's .bashrc
     if [ "$current_user" = "root" ]; then
         echo "/bin/bash $script_file" >> "/root/.bashrc"

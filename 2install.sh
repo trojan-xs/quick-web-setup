@@ -1,7 +1,12 @@
 #!/bin/bash
 
-#clearing Cron
-crontab -r
+#clearing bashrc
+
+
+
+
+
+
 
 #Installing tools
 printf "Instaling tools \n\n"
