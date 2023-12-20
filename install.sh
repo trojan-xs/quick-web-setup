@@ -2,7 +2,7 @@
 
 
 #Installing tools
-sleep 5
+sleep 2
 printf "\nWelcome back\n"
 sleep 3
 
