@@ -5,7 +5,6 @@ github_repo="$1"
 # Check if a GitHub repo is provided
 if [ -n "$github_repo" ]; then
     echo "Updating HTML site from GitHub repo: $github_repo"
-    git clone "$github_repo" .
 else
     echo "No GitHub repo specified. Default site provided"
 fi
@@ -28,10 +27,10 @@ printf "\napt-get upgrade complete\n"
 
 
 printf "\nCreating directory to link to nginx volume\n\n"
-sudo mkdir /usr/share/nginx/html/
+sudo mkdir -p /usr/share/nginx/html/
 git clone $github_repo /usr/share/nginx/html/
-sudo mkdir /var/lib/docker/volumes/ngx-proxy/letsencrypt
-sudo mkdir /var/lib/docker/volumes/ngx-proxy/data
+sudo mkdir -p /var/lib/docker/volumes/ngx-proxy/letsencrypt
+sudo mkdir -p /var/lib/docker/volumes/ngx-proxy/data
 sleep 2
 printf "\nDirectories mapped\n"
 sleep 3
@@ -79,7 +78,7 @@ fi
 printf "\nServer rebooting. Login with same user after reboot to continue install\n"
 sleep 2
 printf "\nServer Rebooting. Press Ctrl C to abort\n"
-sleep 2
+sleep 5
 echo Rebooting
 sleep 5
 #sudo reboot
