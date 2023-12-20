@@ -8,12 +8,12 @@ sleep 3
 
 printf "\nInstaling tools \n\n"
 sleep 3
-sudo apt install curl git net-tools screen nmap
+sudo apt install -y curl git net-tools screen nmap
 
 
 printf "\nInstalling docker \n\n"
 sleep 3
-sudo apt install docker.io
+sudo apt install -y docker.io
 
 
 #Pulling images
@@ -60,14 +60,18 @@ fi
 
 
 #Instructions
+
+localhost_ip=$(hostname -I)
+echo "Your IP is $localhost_ip"
 printf """\n
-Nginx: localhost:8080
+## Docker port mappings ##
 
-Proxy admin: localhost:81
-
-Portainer: localhost:9443
+Nginx: $localhost_ip:8080
+Proxy admin: $localhost_ip:81
+Portainer: $localhost_ip:9443
 
 """
+
 
 printf """
 Nginx First time login:
