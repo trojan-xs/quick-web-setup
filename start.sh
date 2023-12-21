@@ -34,7 +34,7 @@ apply_execute_permissions "$update_script"
 # Execute update.sh
 if [ -f "$update_script" ]; then
     echo "Executing $update_script..."
-    /bin/bash "$update_script" "$github_repo"
+    sudo /bin/bash "$update_script" "$github_repo"
 else
     echo "Error: $update_script not found in the current working directory."
 fi

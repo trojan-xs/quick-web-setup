@@ -81,4 +81,3 @@ Email:    admin@example.com
 Password: changeme\n\n
 Good bye!
 """
-
