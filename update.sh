@@ -70,7 +70,7 @@ fi
 
 
 #Restart
-
+restart() {
 printf "\nServer rebooting. Login with same user after reboot to continue install\n"
 sleep 2
 printf "\nServer Rebooting. Press Ctrl C to abort\n"
@@ -78,3 +78,5 @@ sleep 5
 echo Rebooting
 sleep 5
 sudo reboot
+
+}

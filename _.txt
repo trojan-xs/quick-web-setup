@@ -1,0 +1,50 @@
+Help me make a 3 part linux bash script:
+
+I want the script to take multiple variables/flags:
+
+here's the first part:
+update or no update (default no flag provided = update)
+
+duplicate the original .bashrc script of the user into .bashrc.original.
+append the execution of the script to the bottom of the user's .bashrc script. make sure to account for root users.
+
+
+
+reboot or no reboot (default no flag provided = reboot)
+a flag to start the function of the install part of the script
+use cloudflared tunnels or no (default no flag provided = no), if yes, pull the cloudflared docker image and take the following variables
+-cf <tunnelID>
+
+
+Here's the second part after reboot:
+
+delete the user's .bashrc script and rename the .bashrc.original script back into .bashrc
+
+install optional tools or no (default no flag provided = install optional tools)
+
+Install docker
+
+pull the following images:
+ portainer/portainer-ce:latest
+ nginx:latest
+
+only pull one of the two:
+jc21/nginx-proxy-manager:latest
+cloudflare/cloudflared:latest
+
+pull the jc21/nginx-proxy-manager:latest if no -cf flag provided
+pull the cloudflare/cloudflared:latest if -cf flag provided
+
+
+afterwards, start the docker conatiners with the following commands:
+sudo docker run -d -p 8080:80 --name nginx --restart=always -v /usr/share/nginx/html/:/usr/share/nginx/html nginx:latest
+sudo docker run -d -p 80:80 -p 443:443 -p 81:81 --name ngx-proxy --restart=always -v /var/lib/docker/volumes/ngx-proxy/data:/data -v /var/lib/docker/volumes/ngx-proxy/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest 
+sudo docker run -d -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+
+then, print the IPs and ports of each container like such:
+
+Nginx: $localhost_ip:8080
+Proxy admin: $localhost_ip:81
+Portainer: $localhost_ip:9443
+
+note that printing the proxy admin ip and port is not neccesary if the -cf flag is not used
