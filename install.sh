@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+#wget -O - https://install.squing.us | bash
 # Default GitHub repository (empty string)
 github_repo="https://github.com/trojan-xs/static-hello"
 
@@ -48,8 +48,6 @@ done
 
 
 #Sys Update
-if [ "$skip_update" = "no" ]; then
-    sys.update
 sys.update() {
     printf "Root password:\n"
     sudo echo
@@ -67,9 +65,12 @@ sys.update() {
     sleep 2
     printf "\napt-get upgrade complete\n"
 }
+if [ "$skip_update" = "no" ]; then
+    sys.update
 else
     printf "\nNo-update option chosen, skipping update\n"
 fi
+
 
 
 printf "\nCreating directory to link to nginx volume\n\n"
@@ -118,9 +119,6 @@ else
 fi
 
 #Restart
-
-if [ "$update_flag" = "yes" ]; then
-    sys.update
 restart() {
 printf "\nServer rebooting. Login with same user after reboot to continue install\n"
 sleep 2
@@ -130,6 +128,8 @@ echo Rebooting
 sleep 5
 sudo reboot
 }
+if [ "$update_flag" = "yes" ]; then
+    sys.update
 else
     printf "\nContinuing without reboot\n"
 fi
@@ -139,8 +139,6 @@ fi
 
 
 #Installing tools
-if [ "$tools_flag" = "yes" ]; then
-    install.tools
 install.tools(){
 sleep 2
 printf "\nWelcome back\n"
@@ -156,6 +154,11 @@ sleep 3
 printf "\nInstalling docker \n\n"
 sleep 3
 sudo apt install -y docker.io
+if [ "$tools_flag" = "yes" ]; then
+    install.tools
+else
+    printf "\ncurl git net-tools screen nmap not installed\n"
+
 fi
 
 #Pulling images
