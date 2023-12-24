@@ -10,10 +10,10 @@ if [ "$#" -eq 1 ]; then
 fi
 
 skip_update="no"
-reboot_flag="no"
+reboot_flag="yes"
 get_tools="yes"
 cf_flag="no"
-continue_flag="no"
+part2="no"
 cf_id=""
 
 while [[ $# -gt 0 ]]; do
@@ -36,7 +36,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         -c|--continue)
-            continue_flag="yes"
+            part2="yes"
             shift
             ;;
         *)
@@ -137,7 +137,16 @@ fi
 
 
 
+part2(){
+install.tools
+install.docker
+pull.images
+spin.up
+bashrc.clear
+print.instructions
 
+
+}
 #Installing tools
 install.tools(){
 sleep 2
@@ -151,17 +160,21 @@ sleep 3
 #sudo apt install -y curl git net-tools screen nmap
 }
 
+install.docker(){
 printf "\nInstalling docker \n\n"
 sleep 3
-sudo apt install -y docker.io
-if [ "$tools_flag" = "yes" ]; then
+#sudo apt install -y docker.io
+
+if [ "$get_tools" = "yes" ]; then
     install.tools
 else
     printf "\ncurl git net-tools screen nmap not installed\n"
 
 fi
+}
 
 #Pulling images
+pull.images(){
 printf "\nPulling images\n\n"
 sleep 3
 #sudo docker pull portainer/portainer-ce:latest
@@ -181,9 +194,11 @@ else
     printf "\nPulled Nginx proxy\n"
 
 fi
-
+}
 
 #Start machines
+
+spin.up(){
 printf "\nSpinning up machines\n"
 sleep 3
 #sudo docker run -d -p 8080:80 --name nginx --restart=always -v /usr/share/nginx/html/:/usr/share/nginx/html nginx:latest
@@ -200,9 +215,11 @@ else
     #sudo docker run -d -p 80:80 -p 443:443 -p 81:81 --name ngx-proxy --restart=always -v /var/lib/docker/volumes/ngx-proxy/data:/data -v /var/lib/docker/volumes/ngx-proxy/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest 
     printf "\nStarted Nginx Proxy"
 fi
+}
 
 
 ### Clearing bashrc ###
+bashrc.clear(){
 printf "\nClearing bashrc\n"
 sleep 3
 # Get the username
@@ -229,10 +246,12 @@ else
     # Backup does not exist
     printf "\nNo .bashrc.original backup found. No changes made.\n"
 fi
+}
+
 
 
 #Instructions
-
+print.instructions(){
 localhost_ip=$(hostname -I)
 echo "Your IP is $localhost_ip"
 printf """\n
@@ -251,6 +270,8 @@ Email:    admin@example.com
 Password: changeme\n\n
 Good bye!
 """
+}
+
 
 
 
