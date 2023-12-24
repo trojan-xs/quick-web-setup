@@ -9,17 +9,17 @@ if [ "$#" -eq 1 ]; then
     github_repo="$1"
 fi
 
-update_flag="no"
+skip_update="no"
 reboot_flag="no"
-tools_flag="no"
+get_tools="yes"
 cf_flag="no"
 continue_flag="no"
 cf_id=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -u|--update)
-            update_flag="yes"
+        -su|--update)
+            skip_update="yes"
             shift
             ;;
         -r|--reboot)
@@ -27,7 +27,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -t|--tools)
-            tools__flag="yes"
+            get_tools="yes"
             shift
             ;;
         -cf|--cloudflare)
@@ -48,7 +48,7 @@ done
 
 
 #Sys Update
-if [ "$update_flag" = "yes" ]; then
+if [ "$skip_update" = "no" ]; then
     sys.update
 sys.update() {
     printf "Root password:\n"
