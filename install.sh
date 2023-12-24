@@ -38,6 +38,7 @@ while [[ $# -gt 0 ]]; do
         -c|--continue)
             continue_flag="yes"
             shift
+            ;;
         *)
             echo "Unknown option: $1"
             exit 1
@@ -55,14 +56,14 @@ sys.update() {
 
     printf "\nUpdating and upgrading \n\n"
     sleep 2
-    sudo apt-get update -y
+    #sudo apt-get update -y
     sleep 2
     printf "\napt-get update complete\n"
 
     sleep 2
     printf "\nStarting apt-get upgrade\n"
     sleep 2
-    sudo apt-get upgrade -y
+    #sudo apt-get upgrade -y
     sleep 2
     printf "\napt-get upgrade complete\n"
 }
@@ -149,7 +150,7 @@ sudo echo
 
 printf "\nInstaling tools \n\n"
 sleep 3
-sudo apt install -y curl git net-tools screen nmap
+#sudo apt install -y curl git net-tools screen nmap
 }
 
 printf "\nInstalling docker \n\n"
@@ -160,27 +161,41 @@ fi
 #Pulling images
 printf "\nPulling images\n\n"
 sleep 3
-sudo docker pull portainer/portainer-ce:latest
-sudo docker pull nginx:latest
+#sudo docker pull portainer/portainer-ce:latest
+
+printf "\nPulled Portainer\n"
+
+#sudo docker pull nginx:latest
+
+printf "\nPulled Nginx\n"
+
 
 if [ "$cf_flag" = "yes" ]; then
-    sudo docker pull cloudflare/cloudflared:latest
+    #sudo docker pull cloudflare/cloudflared:latest
+    printf "\nPulled Cloudflared\n"
 else
-    sudo docker pull jc21/nginx-proxy-manager:latest
+    #sudo docker pull jc21/nginx-proxy-manager:latest
+    printf "\nPulled Nginx proxy\n"
+
 fi
 
 
 #Start machines
 printf "\nSpinning up machines\n"
 sleep 3
-sudo docker run -d -p 8080:80 --name nginx --restart=always -v /usr/share/nginx/html/:/usr/share/nginx/html nginx:latest
-sudo docker run -d -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+#sudo docker run -d -p 8080:80 --name nginx --restart=always -v /usr/share/nginx/html/:/usr/share/nginx/html nginx:latest
+printf "\nStarted Nginx\n"
+
+#sudo docker run -d -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+printf "\nStarted Portainer"
 
 
 if [ "$cf_flag" = "yes" ]; then
-    sudo docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token $cf_id
+    #sudo docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token $cf_id
+    printf "\nStarted Cloudflared"
 else
-    sudo docker run -d -p 80:80 -p 443:443 -p 81:81 --name ngx-proxy --restart=always -v /var/lib/docker/volumes/ngx-proxy/data:/data -v /var/lib/docker/volumes/ngx-proxy/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest 
+    #sudo docker run -d -p 80:80 -p 443:443 -p 81:81 --name ngx-proxy --restart=always -v /var/lib/docker/volumes/ngx-proxy/data:/data -v /var/lib/docker/volumes/ngx-proxy/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest 
+    printf "\nStarted Nginx Proxy"
 fi
 
 
