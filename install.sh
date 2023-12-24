@@ -76,9 +76,15 @@ fi
 printf "\nCreating directory to link to nginx volume\n\n"
 sudo mkdir -p /usr/share/nginx/html/
 sudo git clone $github_repo /usr/share/nginx/html/
+
+if [ "$cf_flag" = "no" ]; then
 sudo mkdir -p /var/lib/docker/volumes/ngx-proxy/letsencrypt
 sudo mkdir -p /var/lib/docker/volumes/ngx-proxy/data
-sleep 2
+printf "\nNginx Proxy volumes created\n"
+else
+    printf "\nNginx proxy volumes skipped\n"
+fi
+sleep 1
 printf "\nDirectories mapped\n"
 sleep 3
 
@@ -108,10 +114,10 @@ if [ -f "$script_file" ]; then
 
     # Append the script execution line to the user's .bashrc
     if [ "$current_user" = "root" ]; then
-        echo "/bin/bash $script_file" >> "/root/.bashrc"
+        echo "/bin/bash $script_file -c" >> "/root/.bashrc"
         echo "Script execution line appended to .bashrc for root user"
     else
-        echo "/bin/bash $script_file" >> "/home/$current_user/.bashrc"
+        echo "/bin/bash $script_file -c" >> "/home/$current_user/.bashrc"
         echo "Script execution line appended to .bashrc for user: $current_user"
     fi
 else
@@ -119,7 +125,7 @@ else
 fi
 
 #Restart
-restart() {
+sys.restart() {
 printf "\nServer rebooting. Login with same user after reboot to continue install\n"
 sleep 2
 printf "\nServer Rebooting. Press Ctrl C to abort\n"
@@ -128,15 +134,23 @@ echo Rebooting
 sleep 5
 sudo reboot
 }
-if [ "$update_flag" = "yes" ]; then
-    sys.update
+if [ "$cf_flag" = "no" ]; then
+    
+if [ "$reboot_flag" = "yes" ]; then
+    sys.restart
 else
     printf "\nContinuing without reboot\n"
 fi
 
+part1(){
 
 
 
+
+}
+
+
+if [ "$cf_flag" = "yes" ]; then
 part2(){
 install.tools
 install.docker
@@ -144,9 +158,12 @@ pull.images
 spin.up
 bashrc.clear
 print.instructions
-
-
 }
+else
+    continue
+fi
+
+
 #Installing tools
 install.tools(){
 sleep 2
@@ -178,11 +195,9 @@ pull.images(){
 printf "\nPulling images\n\n"
 sleep 3
 #sudo docker pull portainer/portainer-ce:latest
-
 printf "\nPulled Portainer\n"
 
 #sudo docker pull nginx:latest
-
 printf "\nPulled Nginx\n"
 
 
@@ -196,8 +211,8 @@ else
 fi
 }
 
-#Start machines
 
+#Start machines
 spin.up(){
 printf "\nSpinning up machines\n"
 sleep 3
