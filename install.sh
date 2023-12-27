@@ -14,7 +14,7 @@ reboot_flag="yes"
 get_tools="yes"
 cf_flag="no"
 part2="no"
-cf_id=""
+tunnel_id=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -32,7 +32,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -cf|--cloudflare)
             cf_flag="yes"
-            tunnel_id="$2"
             shift 2
             ;;
         -c|--continue)
@@ -65,14 +64,10 @@ sys.update() {
     sleep 2
     printf "\napt-get upgrade complete\n"
 }
-if [ "$skip_update" = "no" ]; then
-    sys.update
-else
-    printf "\nNo-update option chosen, skipping update\n"
-fi
 
 
-
+#Create Volumes
+make.dir() {
 printf "\nCreating directory to link to nginx volume\n\n"
 sudo mkdir -p /usr/share/nginx/html/
 sudo git clone $github_repo /usr/share/nginx/html/
@@ -87,9 +82,10 @@ fi
 sleep 1
 printf "\nDirectories mapped\n"
 sleep 3
+}
 
 
-
+backup.bashrc(){
 # Get the current working directory
 current_dir=$(pwd)
 
@@ -123,6 +119,9 @@ if [ -f "$script_file" ]; then
 else
     echo "Script file not found: $script_file"
 fi
+}
+
+
 
 #Restart
 sys.restart() {
@@ -134,34 +133,7 @@ echo Rebooting
 sleep 5
 sudo reboot
 }
-if [ "$cf_flag" = "no" ]; then
-    
-if [ "$reboot_flag" = "yes" ]; then
-    sys.restart
-else
-    printf "\nContinuing without reboot\n"
-fi
 
-part1(){
-
-
-
-
-}
-
-
-if [ "$cf_flag" = "yes" ]; then
-part2(){
-install.tools
-install.docker
-pull.images
-spin.up
-bashrc.clear
-print.instructions
-}
-else
-    continue
-fi
 
 
 #Installing tools
@@ -177,6 +149,7 @@ sleep 3
 #sudo apt install -y curl git net-tools screen nmap
 }
 
+#Installing docker
 install.docker(){
 printf "\nInstalling docker \n\n"
 sleep 3
@@ -222,9 +195,8 @@ printf "\nStarted Nginx\n"
 #sudo docker run -d -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 printf "\nStarted Portainer"
 
-
 if [ "$cf_flag" = "yes" ]; then
-    #sudo docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token $cf_id
+    #sudo docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token $tunnel_id
     printf "\nStarted Cloudflared"
 else
     #sudo docker run -d -p 80:80 -p 443:443 -p 81:81 --name ngx-proxy --restart=always -v /var/lib/docker/volumes/ngx-proxy/data:/data -v /var/lib/docker/volumes/ngx-proxy/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest 
@@ -276,16 +248,54 @@ Nginx: :8080
 Proxy admin: $localhost_ip:81
 Portainer: $localhost_ip:9443
 
-"""
 
-
-printf """
 Nginx First time login:
 Email:    admin@example.com
 Password: changeme\n\n
 Good bye!
 """
 }
+
+##################Joob was here###################
+#Need to:
+#Make conditions
+#Do part1 and part2 resarts
+
+
+
+part1(){
+if [ "$skip_update" = "no" ]; then
+    sys.update
+else
+    printf "\nNo-update option chosen, skipping update\n"
+fi
+make.dir
+backup.bashrc
+
+if [ "$cf_flag" = "no" ]; then
+
+
+
+if [ "$reboot_flag" = "yes" ]; then
+    sys.restart
+else
+    printf "\nContinuing without reboot\n"
+fi
+
+
+
+
+}
+
+
+
+part2(){
+
+
+
+}
+
+
 
 
 
