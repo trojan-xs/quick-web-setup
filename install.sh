@@ -196,7 +196,7 @@ printf "\nStarted Nginx\n"
 printf "\nStarted Portainer"
 
 if [ "$cf_flag" = "yes" ]; then
-    #sudo docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token $tunnel_id
+    #sudo docker run -d --name CF-ZTNAA cloudflare/cloudflared:latest tunnel --no-autoupdate run --token $tunnel_id
     printf "\nStarted Cloudflared"
 else
     #sudo docker run -d -p 80:80 -p 443:443 -p 81:81 --name ngx-proxy --restart=always -v /var/lib/docker/volumes/ngx-proxy/data:/data -v /var/lib/docker/volumes/ngx-proxy/letsencrypt:/etc/letsencrypt jc21/nginx-proxy-manager:latest 
