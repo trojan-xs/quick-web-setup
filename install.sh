@@ -273,18 +273,11 @@ make.dir
 backup.bashrc
 
 if [ "$cf_flag" = "no" ]; then
-
-
-
 if [ "$reboot_flag" = "yes" ]; then
     sys.restart
 else
     printf "\nContinuing without reboot\n"
 fi
-
-
-
-
 }
 
 
