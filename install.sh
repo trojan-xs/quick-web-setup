@@ -1,19 +1,19 @@
 #!/bin/bash
 
 #wget -O - https://install.squing.us | bash
-# Default GitHub repository placeholder
+# Default GitHub repository (empty string)
 github_repo="https://github.com/trojan-xs/static-hello"
 
 # Check if a GitHub repo argument is provided
 if [ "$#" -eq 1 ]; then
     github_repo="$1"
 fi
-#Default values
+
 skip_update="no"
 reboot_flag="yes"
 get_tools="yes"
 cf_flag="no"
-continue="no"
+part2="no"
 tunnel_id=""
 
 while [[ $# -gt 0 ]]; do
@@ -22,24 +22,20 @@ while [[ $# -gt 0 ]]; do
             skip_update="yes"
             shift
             ;;
-        -nr|--no-reboot)
-            reboot_flag="no"
+        -r|--reboot)
+            reboot_flag="yes"
             shift
             ;;
-        -nt|--no-tools)
-            get_tools="no"
+        -t|--tools)
+            get_tools="yes"
             shift
             ;;
-        -cf|--cf-tunnel)
-            cf_flag="" ###Work in progress
+        -cf|--cloudflare)
+            cf_flag="yes"
             shift 2
             ;;
         -c|--continue)
-            continue="yes"
-            shift
-            ;;
-        -id|--cf-id)
-            continue="yes"
+            part2="yes"
             shift
             ;;
         *)
@@ -49,25 +45,22 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-check.sudo(){
-    printf "Root password:\n"
-    sudo echo
-}
-
-
 
 #Sys Update
 sys.update() {
+    printf "Root password:\n"
+    sudo echo
+
     printf "\nUpdating and upgrading \n\n"
     sleep 2
-    sudo apt-get update -y
+    #sudo apt-get update -y
     sleep 2
     printf "\napt-get update complete\n"
 
     sleep 2
     printf "\nStarting apt-get upgrade\n"
     sleep 2
-    sudo apt-get upgrade -y
+    #sudo apt-get upgrade -y
     sleep 2
     printf "\napt-get upgrade complete\n"
 }
@@ -146,16 +139,28 @@ sudo reboot
 #Installing tools
 install.tools(){
 sleep 2
+printf "\nWelcome back\n"
+sleep 3
+printf "Root password:\n"
+sudo echo
+
 printf "\nInstaling tools \n\n"
 sleep 3
-sudo apt install -y curl git net-tools screen nmap
+#sudo apt install -y curl git net-tools screen nmap
 }
 
 #Installing docker
 install.docker(){
 printf "\nInstalling docker \n\n"
 sleep 3
-sudo apt install -y docker.io
+#sudo apt install -y docker.io
+
+if [ "$get_tools" = "yes" ]; then
+    install.tools
+else
+    printf "\ncurl git net-tools screen nmap not installed\n"
+
+fi
 }
 
 #Pulling images
@@ -251,48 +256,43 @@ Good bye!
 """
 }
 
+##################Joob was here###################
+#Need to:
+#Make conditions
+#Do part1 and part2 resarts
 
 
-start(){
-if [ "$continue" = "no" ]; then
-    run
-else
-    resume
-fi
-}
 
-
-run(){
+part1(){
 if [ "$skip_update" = "no" ]; then
     sys.update
-    if [ "$get_tools" = "yes" ]; then
-    install.tools
-else
-    printf "\ncurl git net-tools screen nmap not installed\n"
-
-fi
-    make.dir
-    backup.bashrc
-    sys.restart
 else
     printf "\nNo-update option chosen, skipping update\n"
-    make.dir
-    install.docker
-    pull.images
-    spin.up
-    print.instructions
 fi
-}
+make.dir
+backup.bashrc
 
-resume(){
-if [ "$continue" = "yes" ]; then
-     install.docker
-    pull.images
-    spin.up
-    print.instructions
+if [ "$cf_flag" = "no" ]; then
+
+
+
+if [ "$reboot_flag" = "yes" ]; then
+    sys.restart
 else
-    echo Hi!
+    printf "\nContinuing without reboot\n"
 fi
+
+
+
+
+}
+
+
+
+part2(){
+
+
+
 }
 
 
@@ -300,21 +300,3 @@ fi
 
 
 
-
-
-
-run
-
-
-
-#####To do: ####
-<<COMMENT
-Fix cloudflared string parsing
-Fix check.sudo logic
-Fix run and resume function logic
-
-
-Make it pretty
-Write proper comments
-
-COMMENT
